@@ -1,0 +1,122 @@
+﻿@model IPagedList<Student>
+@using PagedList;
+@using PagedList.Mvc;
+@using MvcContrib.UI.Grid;
+@using Tavi.Demo.G2.Models;
+@using Tavi.Demo.G2.HtmlEx;
+@{
+    ViewBag.Title = "Danh sách sinh viên";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@section header{
+    Danh sách sinh viên
+}
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <!-- /.card -->
+                <div class="card">
+                    <div class="card-header"  id="formview">
+                        <div>
+                            @using (Html.BeginForm())
+                            {
+                                @Html.Hidden("Page")
+                                <div class="form-group">
+                                    <div class="form-search">
+                                        <div class="row">
+                                            <div class="col-md-5">
+                                                @Html.TextBox("StudentCode", ViewBag.StudentCode as String, new { @class = "form-control", @placeholder = "Nhập mã sinh viên" })
+                                            </div>
+                                            <div class="col-md-5">
+                                                @Html.TextBox("FullName", ViewBag.FullName as String, new { @class = "form-control", @placeholder = "Nhập tên sinh viên" })
+                                            </div>
+                                            <div class="col-md-2">
+                                                @Html.Button("Tìm kiếm", "btn btn-primary", "btnTimKiem", "fa fa-search-plus")
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <div class="form-button">
+                                        @Html.Button("Thêm mới", "btn btn-primary", "btnAdd", "fa fa-plus")
+                                        @Html.Button("Xóa", "btn btn-danger", "btnDel", "fa fa-trash-o")
+                                    </div>
+                                </div>
+                                <div class="card-body">
+                                    <div class="table table-bordered table-striped">
+                                        @Html.Grid(Model).Columns(column =>
+                                   {
+                                       column.For(m => Html.htmlCheckBox("cbxItem", m.StudentID)).Named(Html.htmlCheckBox("cbxList").ToString()).Attributes(style => "width:5%");
+                                       column.For(m => Html.ActionLink(m.StudentCode, "Add", new { id = m.StudentID })).Named("Mã sinh viên").Attributes(style => "width:10%");
+                                       column.For(m => m.FullName).Named("Họ và tên").Attributes(style => "width:30%");
+                                       column.For(m => m.Department.DepartmentName).Named("Khoa học").Attributes(style => "width:30%");
+                                       column.For(m => m.Status == true ? "Còn sử dụng" : "Không sử dụng").Named("Trạng thái").Attributes(style => "width:20%");
+                                       column.For(m => Html.Raw("<div class='btn-group'>" + "<button type='button' class='btn btn-default btn-sm', name = '"+m.StudentID +"', id = 'btnDelete'><i class='far fa-trash-alt'></i></button>"
+
+                                           + "<a type='button' class='btn btn-default btn-sm' href = '/Student/Add/"+ m.StudentID+"'><i class='far fa-edit'></i></a>"
+                                           + "</div>")
+                             ).Named("Trạng thái").Attributes(style => "width:20%");
+                                   }).Empty("Chưa có dữ liệu sinh viên")
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    @Html.PagedListPager(Model, PageCurrent => @Url.Action("Index", new { PageCurrent = PageCurrent, StudentCode = ViewBag.StudentCode, FullName = ViewBag.FullName }), PagedListRenderOptions.PageNumbersOnly)
+                                </div>
+                            }
+                        </div>
+                    </div>
+                    <!-- /.card-header -->
+                    
+                    <!-- /.card-body -->
+                </div>
+                <!-- /.card -->
+            </div>
+            <!-- /.col -->
+        </div>
+        <!-- /.row -->
+    </div>
+    <!-- /.container-fluid -->
+</section>
+@section jsFooter{
+    <script language="javascript" type="text/javascript">
+           $(document).ready(function () {
+        $('#btnTimKiem').click(function () {
+            $("#formview form").submit();
+        });
+
+        $('#btnDel').click(function () {
+            var checked = $("input:checked[name='cbxItem']");
+            if (checked.length > 0) {
+                $("#formview form").attr('action', '@Url.Action("Delete")');
+                if (confirm("Nếu xóa trường này, bạn sẽ không thể khôi phục lại! Vẫn xóa!")) {
+                    $("#formview form").submit();                   
+                }
+            } else {
+                alert("Bạn phải chọn sinh viên cần xóa");
+            }
+
+        });
+             
+
+        $('#Create').click(function () {
+            window.location = '@Url.Action("Add")';
+        });
+         $('#btnAdd').click(function () {
+            window.location = '@Url.Action("Add")';
+         });
+         $('#btnDelete').click(function () {
+           window.location = '@Url.Action("Recycle")';
+        });
+             
+    });      
+    </script>
+}
+
+
+
+
+
+

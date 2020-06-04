@@ -1,0 +1,287 @@
+﻿@model Tavi.Demo.G2.Models.Student
+@using Tavi.Demo.G2.HtmlEx
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@if (Model.StudentID > 0)
+{
+    @section header{
+        Sửa thông tin sinh viên
+    }
+}
+else
+{
+    @section header{
+        Thêm mới thông tin sinh viên
+    }
+}
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements disabled -->
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title"></h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body" id="formControl">
+                        @using (Html.BeginForm())
+                        {
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        @Html.Label("Mã sinh viên:", new { @class = "control-label" })
+                                        <span class="required"> (*)</span>
+                                        @Html.TextBox("StudentCode", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.Label("Họ và tên:", new { @class = "control-label" })
+                                        <span class="required"> (*)</span>
+                                        @Html.TextBox("FullName", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        @Html.Label("Ngày sinh:", new { @class = "control-label" })
+                                        @Html.TextBox("Birthday", Model.Birthday.HasValue ? Model.Birthday.Value.ToString("dd/MM/yyyy") : "", new { @class = "form-control" })
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        @Html.Label("Số điện thoại:", new { @class = "control-label" })
+                                        @Html.TextBox("Phone", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        @Html.Label("Email:", new { @class = "control-label" })
+                                        @Html.TextBox("Email", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        @Html.Label("Địa chỉ:", new { @class = "control-label" })
+                                        @Html.TextArea("Address", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+
+                                <div class="col-sm-6">
+                                    <!-- text input -->
+                                    <div class="col-md-6" id="loadPartialView">
+                                        @Html.Label("Thuộc khoa:", new { @class = "control-label" })
+                                        <span class="required"> (*)</span>
+                                        <div id="ddlDepartment">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <!-- text input -->
+                                    <div class="col-md-6" id="loadPartialView">
+                                        @Html.Label("Thuộc lớp:", new { @class = "control-label" })
+                                        <span class="required"> (*)</span>
+                                        <div id="ddlClassRoom">
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        @Html.Label("Ghi chú", new { @class = "control-label" })
+                                        @Html.TextArea("Description", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    @Html.Label("Còn sử dụng:", new { @class = "control-label" })
+                                    @Html.CheckBox("Status")
+                                </div>
+                            </div>                           
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    @Html.Button("Ghi lại", "btn btn-success", "btnGhiLai", "fa fa-floppy-o")
+                                    @Html.Button("Quay lại", "btn btn-default", "btnQuayLai", "fa fa-arrow-left")
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@section jsFooter{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        $('#formControl form').validate({
+            rules: {
+                StudentCode: {
+                    required: true
+
+                },
+                Birthday: {
+                    requied: true
+                },
+                Email: {
+                    required: true,
+                    email: true,
+                },
+                FullName: {
+                    required: true
+
+                },
+                Phone: {
+                    required: true
+
+                },
+                Address: {
+                    required: true
+
+                },
+                Description: {
+                    required: true
+
+                },
+                ListDepartmentId: {
+                    required: true
+                },
+                ListClassRoomID: {
+                    required: true
+                },
+                Birthday: {
+                    required: true
+                },
+                terms: {
+                    required: true
+                },
+            },
+            messages: {
+                StudentCode: {
+                    required: "Không được để trống trường này"
+                },
+                Email: {
+                    required: "Không được để trống trường này",
+                    email: "Email không đúng định dạng"
+                },
+                FullName: {
+                    required: "Không được để trống trường này"
+                },
+                Phone: {
+                    required: "Không được để trống trường này"
+                },
+                Address: {
+                    required: "Không được để trống trường này"
+                },
+                Description: {
+                    required: "Không được để trống trường này"
+                },
+                ListDepartmentId: {
+                    required: "Không được bỏ trống trường này!"
+                },
+                ListClassRoomID: {
+                    required: "Không được bỏ trống trường này!"
+                },
+                Birthday: {
+                    required: "Không được bỏ trống trường này!"
+                },
+                terms: "Please accept our terms"
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+
+        function ListDepartment(DeparmentID) {
+        $.ajax({
+            url: '@Url.Action("ListDeparment")',
+            data: {
+                DeparmentID: DeparmentID
+            },
+            type: "POST",
+            dataType: "html",
+            success: function (data) {
+                $("#ddlDepartment").html(data);
+            },
+            complete: function (data) {
+            }
+        });
+    }
+    function ListClassRoom(DepartmentID, ClassRoomID) {
+
+        $.ajax({
+            url: '@Url.Action("ListClassRoom")',
+            data: {
+                DeparmentID: DepartmentID
+                , ClassRoomID:ClassRoomID
+            },
+            type: "POST",
+            dataType: "html",
+            success: function (data) {
+                $("#ddlClassRoom").html(data);
+            },
+            error: function () {
+
+            },
+            complete: function (data) {
+
+            }
+        });
+    }
+    $(document).ready(function () {
+        $("#Birthday").datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+        ListDepartment('@Model.DepartmentID');
+        ListClassRoom('@Model.DepartmentID','@Model.ClassRoomID');
+        $('#btnQuayLai').click(function () {
+            window.history.back();
+        });
+        $("#btnGhiLai").click(function () {
+            $("#formControl form").submit();
+        });
+        //Test('test du lieu');
+        //DemoLoad();
+    });
+
+
+    </script>
+
+}

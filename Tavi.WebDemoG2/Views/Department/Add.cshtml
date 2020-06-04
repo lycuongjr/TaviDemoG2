@@ -1,0 +1,133 @@
+﻿@model Tavi.Demo.G2.Models.Department
+@using Tavi.Demo.G2.HtmlEx
+@{
+    ViewBag.Title = "Add";
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+@if (Model.DepartmentID > 0)
+{
+    @section header{
+        Sửa thông tin khoa
+    }
+}
+else
+{
+    @section header{
+        Thêm mới thông tin khoa
+    }
+}
+
+
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <!-- general form elements disabled -->
+                <div class="card card-success">
+                    <div class="card-header">
+                        <h3 class="card-title"></h3>
+                    </div>
+                    <!-- /.card-header -->
+                    <div class="card-body" id="formControl">
+                        @using (Html.BeginForm())
+                        {
+
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- text input -->
+                                    <div class="form-group">
+                                        @Html.Label("Tên khoa:", new { @class = "control-label" })
+                                        <span class="required"> (*)</span>
+                                        @Html.TextBox("DepartmentName", null, new { @class = "form-control" })
+                                    </div>
+                                </div>                             
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <!-- textarea -->
+                                    <div class="form-group">
+                                        @Html.Label("Ghi chú", new { @class = "control-label" })
+                                        @Html.TextArea("Description", null, new { @class = "form-control" })
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <!-- textarea -->
+                                <div class="form-group">
+                                    @Html.Label("Còn sử dụng:", new { @class = "control-label" })
+                                    @Html.CheckBox("Status")
+                                </div>
+                            </div>
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    @Html.Button("Ghi lại", "btn btn-success", "btnGhiLai", "fa fa-floppy-o")
+                                    @Html.Button("Quay lại", "btn btn-default", "btnQuayLai", "fa fa-arrow-left")
+                                </div>
+                            </div>
+
+                        }
+
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</section>
+<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+@section jsFooter{
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <script type="text/javascript" language="javascript">
+
+        $('#formControl form').validate({
+            rules: {
+                DepartmentName: {
+                    required: true
+
+                },
+                Description: {
+                    required: true
+
+                },             
+
+                terms: {
+                    required: true
+                },
+            },
+            messages: {
+                ClassName: {
+                    required: "Không được để trống trường này"
+                },
+                Description: {
+                    required: "Không được để trống trường này",
+                    email: "Email không đúng định dạng"
+                },                
+                terms: "Please accept our terms"
+            },
+            errorElement: 'span',
+            errorPlacement: function (error, element) {
+                error.addClass('invalid-feedback');
+                element.closest('.form-group').append(error);
+            },
+            highlight: function (element, errorClass, validClass) {
+                $(element).addClass('is-invalid');
+            },
+            unhighlight: function (element, errorClass, validClass) {
+                $(element).removeClass('is-invalid');
+            }
+        });
+
+          $(document).ready(function () {        
+        $("#btnGhiLai").click(function () {
+          $("#formControl form").submit();
+        });
+        //Test('test du lieu');
+        //DemoLoad();
+    });
+
+
+    </script>
+
+}
